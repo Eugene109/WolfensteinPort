@@ -1,0 +1,5 @@
+global_palette.h
+global_palette.c
+brick_wall.h
+brick_wall.c
+gfx.h
