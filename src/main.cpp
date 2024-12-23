@@ -100,11 +100,12 @@ int main(void) {
 
                                 AA_Line(X_LINE, 7, -5, 2),    AA_Line(Y_LINE, 7, -5, 2)};
 
-    int counter = 0;
+    uint8_t counter = 0;
 
-    const uint8_t SKIP = 2;
-    vec2 rayOffsets[GFX_LCD_WIDTH / SKIP];
-    for (int i = 0; i < GFX_LCD_WIDTH / SKIP; ++i) {
+    const uint8_t SKIP = 4;
+    const uint8_t NUM_RAYS = GFX_LCD_WIDTH / SKIP;
+    vec2 rayOffsets[NUM_RAYS];
+    for (uint8_t i = 0; i < NUM_RAYS; ++i) {
         rayOffsets[i] = (vec2((((i * SKIP) / (GFX_LCD_WIDTH - 1.0)) * 2.0) - 1.0, 1.0));
     }
 
@@ -133,17 +134,15 @@ int main(void) {
         double current_dist = 0;
 
         vec2 cam_forward = rot * vec2(0, 1);
-        for (int a = 0; a < GFX_LCD_WIDTH / SKIP; ++a) {
+        for (uint8_t a = 0; a < NUM_RAYS; ++a) {
             //
             ray = rot * rayOffsets[a];
             double dist = 100;
-            for (int i = 0; i < NUM_LINES; ++i) {
+            for (uint8_t i = 0; i < NUM_LINES; ++i) {
                 if (lines[i].rayIntersection(ray, &current_hit)) {
                     current_dist = dot(current_hit, cam_forward);
-                    // current_dist = dot(cam_forward, current_hit);
                     if (current_dist < dist) {
                         ++counter;
-                        // counter = dist;
                         hit = current_hit;
                         dist = current_dist;
 #ifdef DEBUG
@@ -154,7 +153,7 @@ int main(void) {
             }
             gfx_SetColor(gfx_Darken(224, min(dist * 25, 254)));
             double stripLen = 500 / dist;
-            gfx_FillRectangle_NoClip(a * SKIP, (GFX_LCD_HEIGHT - stripLen) / 2, 2, stripLen);
+            gfx_FillRectangle_NoClip(a * SKIP, (GFX_LCD_HEIGHT - stripLen) / 2, SKIP, stripLen);
         }
         // uint8_t color_data[25000] = {0};
         // // memcpy(&(gfx_vbuffer[0][0]), &(color_data[0]), sizeof(color_data));
