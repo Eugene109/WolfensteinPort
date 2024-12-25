@@ -18,7 +18,7 @@ for i in range(2, len(palette_lines)- 2):
 # print(palette)
 
 size = 2;
-for i in range (1, 64+1):
+for i in (1,2,4,8,16,32,64):
     size += i*i
 
 string = """
@@ -26,7 +26,9 @@ unsigned char brick_wall_arr_data["""+str(size)+"""] =
 {
     """
 
-for i in range(1, 64+1):
+padding = 4
+
+for i in (1,2,4,8,16,32,64):
     im_frame = Image.open('src/gfx/brick_wall/brick_wall-'+str(i)+'_x_'+str(i)+'.png')
     np_frame = np.array(im_frame.getdata())
     # palette_indices = []
@@ -45,9 +47,9 @@ for i in range(1, 64+1):
                 offset = new_offset
         
         # palette_indices.append(current_palette_index)
-        if(j % 15 == 0):
+        if(j % 16 == 0):
             string += "\n    "
-        string += (hex(current_palette_index)+",")
+        string += (f"{current_palette_index:#0{padding}x}"+",")
     print(i)
 
 string += """

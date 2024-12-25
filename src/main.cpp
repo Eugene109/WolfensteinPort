@@ -102,36 +102,55 @@ class AA_Line {
     int wMin_value, wMax_value;
 };
 
-void drawTexStrip(const unsigned char *start_arr_ptr, uint8_t pxl_scl, unsigned xPos, uint8_t yPos, fixed tex_pos,
-                  uint8_t height) {
-#ifdef DEBUG
-    dbg_printf("drawTexStrip");
-#endif
-    // find corresponding index for segment
-    unsigned n = height - 1;
-    unsigned img_offset = unsigned(((n * (n + 1) * (2 * n + 1)) / 2) * 0.3333333333) +
-                          (((tex_pos % (1 << SHIFT)) * height) >> SHIFT) * height;
-#ifdef DEBUG
-    dbg_printf("img_offset: %d\n", img_offset);
-#endif
-    gfx_sprite_t *tex_strip_sprite = gfx_MallocSprite(1, height);
-    memcpy(tex_strip_sprite->data, start_arr_ptr + img_offset, height);
-    // create sprite with that segment
-    // scale up sprite by a factor of pxl_scl
-    if ((xPos + pxl_scl) <= GFX_LCD_WIDTH && (yPos + height * pxl_scl) < GFX_LCD_HEIGHT && xPos >= 0 && yPos >= 0) {
-        gfx_ScaledSprite_NoClip(tex_strip_sprite, xPos, yPos, pxl_scl, pxl_scl);
+inline void drawTexStrip(const unsigned char *start_arr_ptr, uint8_t pxl_scl, unsigned xPos, int yPos, fixed tex_pos,
+                         unsigned dest_height) {
+    unsigned SRC_H = 32;
+    unsigned SRC_H_SHIFT = 5;
+    unsigned img_offset = (((1 << ((SRC_H_SHIFT - 1) << 1)) << (SHIFT + 2)) / 3) >> SHIFT;
+    const uint8_t *strip_arr_ptr =
+        start_arr_ptr + img_offset + ((((tex_pos % (1 << SHIFT)) << SRC_H_SHIFT) >> SHIFT) << SRC_H_SHIFT);
+    gfx_sprite_t *img_strip = gfx_MallocSprite(1, dest_height);
+    for (unsigned i = 0; i < dest_height; ++i) {
+        uint8_t color = *(strip_arr_ptr + (((i << SRC_H_SHIFT) / dest_height)));
+        img_strip->data[i] = color;
+    }
+    // memmove(img_strip->data, strip_arr_ptr, height);
+
+    if ((xPos + pxl_scl) <= GFX_LCD_WIDTH && (yPos + dest_height) < GFX_LCD_HEIGHT && xPos >= 0 && yPos >= 0) {
+        gfx_ScaledSprite_NoClip(img_strip, xPos, yPos, pxl_scl, 1);
     } else {
-#ifdef DEBUG
-        dbg_printf("clipped!  xPos = %d, yPos = %d, pxl_scl = %d, height = %d", xPos, yPos, pxl_scl, height);
-#endif
+        gfx_SetColor(1);
+        gfx_Rectangle(xPos, yPos, pxl_scl, dest_height);
+        // continue;
+    }
+    free(img_strip);
+}
+
+inline void drawTexStrip_scl_h(const unsigned char *start_arr_ptr, uint8_t pxl_scl, unsigned xPos, int yPos,
+                               fixed tex_pos, unsigned height) {
+    unsigned SRC_H = 32;
+    unsigned SRC_H_SHIFT = 5;
+    unsigned img_offset = (((1 << ((SRC_H_SHIFT - 1) << 1)) << (SHIFT + 2)) / 3) >> SHIFT;
+    const uint8_t *strip_arr_ptr =
+        start_arr_ptr + img_offset + ((((tex_pos % (1 << SHIFT)) << SRC_H_SHIFT) >> SHIFT) << SRC_H_SHIFT);
+    gfx_sprite_t *img_strip = gfx_MallocSprite(1, height);
+    for (unsigned i = 0; i < height; ++i) {
+        uint8_t color = *(strip_arr_ptr + (((i << SRC_H_SHIFT) / height)));
+        img_strip->data[i] = color;
+    }
+    // memmove(img_strip->data, strip_arr_ptr, height);
+
+    if ((xPos + pxl_scl) <= GFX_LCD_WIDTH && (yPos + height * pxl_scl) < GFX_LCD_HEIGHT && xPos >= 0 && yPos >= 0) {
+        gfx_ScaledSprite_NoClip(img_strip, xPos, yPos, pxl_scl, pxl_scl);
+    } else {
         gfx_SetColor(1);
         gfx_Rectangle(xPos, yPos, pxl_scl, height * pxl_scl);
         // continue;
     }
-    free(tex_strip_sprite);
-    // draw it at xPos, yPos
-    // delete sprite
+    free(img_strip);
 }
+// void drawTexStrip__NoClip(const unsigned char *start_arr_ptr, uint8_t pxl_scl, unsigned xPos, unsigned yPos,
+//                           fixed tex_pos, unsigned dest_height) {}
 
 void draw();
 
@@ -245,8 +264,17 @@ int main(void) {
 
             // gfx_FillRectangle(a * SKIP, (GFX_LCD_HEIGHT - (stripLen / 4 >> SHIFT) * 4) / 2, SKIP,
             //                   (stripLen / 4 >> SHIFT) * 4);
-            drawTexStrip(brick_wall_arr_data, SKIP, a * SKIP, (GFX_LCD_HEIGHT - ((stripLen / 4) >> SHIFT) * 4) / 2,
-                         texCoord, ((stripLen / 4) >> SHIFT));
+
+// #define LOW_RES
+#ifdef LOW_RES
+            // striplen>>2 for skip of 4
+            drawTexStrip_scl_h(brick_wall_arr_data, SKIP, a * SKIP,
+                               (GFX_LCD_HEIGHT - (((stripLen >> 2) >> SHIFT) << 2)) >> 1, texCoord,
+                               ((stripLen >> 2) >> SHIFT));
+#else
+            drawTexStrip(brick_wall_arr_data, SKIP, a * SKIP, (GFX_LCD_HEIGHT - ((stripLen) >> SHIFT)) >> 1, texCoord,
+                         (stripLen >> SHIFT));
+#endif
         }
         // uint8_t color_data[25000] = {0};
         // // memcpy(&(gfx_vbuffer[0][0]), &(color_data[0]), sizeof(color_data));
