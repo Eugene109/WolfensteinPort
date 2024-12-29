@@ -8,6 +8,7 @@ extern "C" {
 #include "global_palette.h"
 #define sprites_palette_offset 0
 #include "brick_wall.h"
+#include "ceiling_floor_tex.h"
 
 #ifdef __cplusplus
 }

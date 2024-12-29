@@ -54,20 +54,39 @@ const fixed cosTable[804] = {
 #define PI 804
 
 // theta is in radians
-fixed f_cos(fixed theta) {
-    if ((theta / PI) % 2 == 0) {
-        return cosTable[theta % PI];
-    } else if ((theta / PI) % 2 == 1) {
-        return -cosTable[theta % PI];
+
+inline fixed f_cos(fixed theta) {
+    if (theta >= 0) {
+        if ((theta / PI) % 2 == 0) {
+            return cosTable[theta % PI];
+        } else if ((theta / PI) % 2 == 1) {
+            return -cosTable[theta % PI];
+        }
+    } else {
+        if ((theta / PI) % 2 == 0) {
+            return -cosTable[theta % PI + PI];
+        } else if ((theta / PI) % 2 == -1) {
+            return cosTable[theta % PI + PI];
+        }
     }
+    return 696969;
 }
-fixed f_sin(fixed theta) {
+inline fixed f_sin(fixed theta) {
     theta += PI / 2;
-    if ((theta / PI) % 2 == 0) {
-        return -cosTable[theta % PI];
-    } else if ((theta / PI) % 2 == 1) {
-        return cosTable[theta % PI];
+    if (theta >= 0) {
+        if ((theta / PI) % 2 == 0) {
+            return -cosTable[theta % PI];
+        } else if ((theta / PI) % 2 == 1) {
+            return cosTable[theta % PI];
+        }
+    } else {
+        if ((theta / PI) % 2 == 0) {
+            return cosTable[theta % PI + PI];
+        } else if ((theta / PI) % 2 == -1) {
+            return -cosTable[theta % PI + PI];
+        }
     }
+    return 420420;
 }
 fixed f_tan(fixed theta);
 

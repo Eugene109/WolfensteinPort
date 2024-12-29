@@ -1,5 +1,5 @@
 global_palette.h
 global_palette.c
-brick_wall.h
-brick_wall.c
+ceiling_floor_tex.h
+ceiling_floor_tex.c
 gfx.h

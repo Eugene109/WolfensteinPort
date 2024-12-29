@@ -22,7 +22,7 @@ for i in (1,2,4,8,16,32,64):
     size += i*i
 
 string = """
-unsigned char brick_wall_arr_data["""+str(size)+"""] =
+const unsigned char brick_wall_arr_data["""+str(size)+"""] =
 {
     """
 

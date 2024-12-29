@@ -6,75 +6,19 @@ palettes:
     images:
       - brick_wall/brick_wall-1_x_1.png
       - brick_wall/brick_wall-2_x_2.png
-      - brick_wall/brick_wall-3_x_3.png
       - brick_wall/brick_wall-4_x_4.png
-      - brick_wall/brick_wall-5_x_5.png
-      - brick_wall/brick_wall-6_x_6.png
-      - brick_wall/brick_wall-7_x_7.png
       - brick_wall/brick_wall-8_x_8.png
-      - brick_wall/brick_wall-9_x_9.png
-      - brick_wall/brick_wall-10_x_10.png
-      - brick_wall/brick_wall-11_x_11.png
-      - brick_wall/brick_wall-12_x_12.png
-      - brick_wall/brick_wall-13_x_13.png
-      - brick_wall/brick_wall-14_x_14.png
-      - brick_wall/brick_wall-15_x_15.png
       - brick_wall/brick_wall-16_x_16.png
-      - brick_wall/brick_wall-17_x_17.png
-      - brick_wall/brick_wall-18_x_18.png
-      - brick_wall/brick_wall-19_x_19.png
-      - brick_wall/brick_wall-20_x_20.png
-      - brick_wall/brick_wall-21_x_21.png
-      - brick_wall/brick_wall-22_x_22.png
-      - brick_wall/brick_wall-23_x_23.png
-      - brick_wall/brick_wall-24_x_24.png
-      - brick_wall/brick_wall-25_x_25.png
-      - brick_wall/brick_wall-26_x_26.png
-      - brick_wall/brick_wall-27_x_27.png
-      - brick_wall/brick_wall-28_x_28.png
-      - brick_wall/brick_wall-29_x_29.png
-      - brick_wall/brick_wall-30_x_30.png
-      - brick_wall/brick_wall-31_x_31.png
       - brick_wall/brick_wall-32_x_32.png
-      - brick_wall/brick_wall-33_x_33.png
-      - brick_wall/brick_wall-34_x_34.png
-      - brick_wall/brick_wall-35_x_35.png
-      - brick_wall/brick_wall-36_x_36.png
-      - brick_wall/brick_wall-37_x_37.png
-      - brick_wall/brick_wall-38_x_38.png
-      - brick_wall/brick_wall-39_x_39.png
-      - brick_wall/brick_wall-40_x_40.png
-      - brick_wall/brick_wall-41_x_41.png
-      - brick_wall/brick_wall-42_x_42.png
-      - brick_wall/brick_wall-43_x_43.png
-      - brick_wall/brick_wall-44_x_44.png
-      - brick_wall/brick_wall-45_x_45.png
-      - brick_wall/brick_wall-46_x_46.png
-      - brick_wall/brick_wall-47_x_47.png
-      - brick_wall/brick_wall-48_x_48.png
-      - brick_wall/brick_wall-49_x_49.png
-      - brick_wall/brick_wall-50_x_50.png
-      - brick_wall/brick_wall-51_x_51.png
-      - brick_wall/brick_wall-52_x_52.png
-      - brick_wall/brick_wall-53_x_53.png
-      - brick_wall/brick_wall-54_x_54.png
-      - brick_wall/brick_wall-55_x_55.png
-      - brick_wall/brick_wall-56_x_56.png
-      - brick_wall/brick_wall-57_x_57.png
-      - brick_wall/brick_wall-58_x_58.png
-      - brick_wall/brick_wall-59_x_59.png
-      - brick_wall/brick_wall-60_x_60.png
-      - brick_wall/brick_wall-61_x_61.png
-      - brick_wall/brick_wall-62_x_62.png
-      - brick_wall/brick_wall-63_x_63.png
       - brick_wall/brick_wall-64_x_64.png
+      - ceiling_floor_tex.png
 
 converts:
   - name: sprites
     palette: global_palette
     transparent-color-index: 0
     images:
-      - brick_wall.png
+      - ceiling_floor_tex.png
 
 outputs:
   - type: c
